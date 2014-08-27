@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Monitor/lib/JRI.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Monitor/lib/JRIEngine.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Monitor/lib/REngine.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Monitor/lib/RserveEngine.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Monitor/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Monitor/lib/commons-lang3-3.3.2.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

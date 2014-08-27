@@ -10,7 +10,10 @@ dirClearSky = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/
 
 
 #receiving commands
-#args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
+gsiIndex <- args[1]
+gsi <- numeric(args[2])
+
 #rnorm(n=as.numeric(args[1]), mean=as.numeric(args[2]))
 
 ## 1 - Load ClearSky
@@ -27,10 +30,19 @@ for(x in csfiles)
 
 
 ## 2 - Calculate Persistence
-csIndex = "2013-01-01 12:00"
-csValue = csdata$CS_GHI[pmatch(csIndex,csdata$Tm)]
+gsiIndex = "2014-01-01 12:00"
+gsi = 11.8
+csIndex = substr(5, nchar(gsiIndex)) # retrieve "mm-dd hh:mi" part
 
-## 3 - Save File
+ind = pmatch(csIndex,csdata$Tm)
+csky = csdata$CS_GHI[ind]
+
+Kt = gsi / csky
+
+ind = if(ind == length(csdata$CS_GHI[ind])) 1 else i + 1
+Persistence = Kt * csdata$CS_GHI[ind];
+
+# 3 - Save File
 
 
 
