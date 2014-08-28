@@ -2,7 +2,7 @@ package monitor;
 
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.*;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -35,14 +35,14 @@ public class Monitor {
 	public static void main(String[] args) {
 
 		try{
-			arquivoProperties = Util.getProperties();
+//			arquivoProperties = Util.getProperties();
 	
 	//			monitor = new Monitor(Paths.get(arquivoProperties.getProperty("diretorioPadrao") + File.separatorChar + arquivoProperties.getProperty("diretorioAlvos")), true, hashNomeDiretorioAlvo);
 				
-			monitor = new Monitor(Paths.get("INPUTS"), true);
+			monitor = new Monitor(Paths.get("C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\INPUTS"), true);
 			monitor.processarEventos();
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
 	}
 
@@ -73,7 +73,7 @@ public class Monitor {
 	 * Registra o diretorio com o watchService
 	 */
 	private void registrarDiretorio(Path dir) throws IOException {
-		WatchKey key = dir.register(watcher, ENTRY_CREATE);
+		WatchKey key = dir.register(watcher, ENTRY_CREATE,  ENTRY_MODIFY);
 		keys.put(key, dir);
 	}
 
@@ -138,9 +138,16 @@ public class Monitor {
 				 * Descobre o alvo pelo arquivo alvo do evento
 				 */
 				Path diretorio = dir.resolve(arquivoEvento);
-				String pastaDiretorioAlterado = diretorio.toString().substring(0, diretorio.toString().lastIndexOf("/"));
-				String diretorioCorrente = pastaDiretorioAlterado.substring(0, pastaDiretorioAlterado.toString().lastIndexOf("/"));
+//				String pastaDiretorioAlterado = diretorio.toString().substring(0, diretorio.toString().lastIndexOf("/"));
+//				String diretorioCorrente = pastaDiretorioAlterado.substring(0, pastaDiretorioAlterado.toString().lastIndexOf("/"));
 
+				String[] params = null;
+				
+				if(kind == ENTRY_MODIFY){
+					String linha = Util.getLastLine(diretorio.toFile());
+					
+					params = linha.split("\t");
+				}
 				/**
 				 * Para registrar novos diretorios criados quando o monitor já
 				 * estava executando

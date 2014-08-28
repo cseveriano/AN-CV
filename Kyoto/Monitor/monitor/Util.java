@@ -165,5 +165,16 @@ public class Util {
 
 		return numeroLinhas;
 	}
+	
+	public static String getLastLine(File file) throws IOException{
+		List<String> lines = FileUtils.readLines(file);
+		
+		if(lines != null && lines.size() > 0){
+			return lines.get(lines.size() - 1);
+		}
+		
+		return null;
+	}
+	
 }
 
