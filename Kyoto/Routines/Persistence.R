@@ -1,18 +1,16 @@
-#Clear all workspace
-rm(list = ls(all = TRUE))
-library(zoo)
-library(forecast)
-library(insol)
+Persistence <- function(gsiDate, gsi){
 
-dirInputs = "../Data/INPUTS"
+#Clear all workspace
+#rm(list = ls(all = TRUE))
+
 #dirClearSky = "../Data/ClearSky"
 dirClearSky = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/ClearSky"
 
 
 #receiving commands
-args <- commandArgs(trailingOnly = TRUE)
-gsiIndex <- args[1]
-gsi <- numeric(args[2])
+#args <- commandArgs(trailingOnly = TRUE)
+#gsiDate <- args[1]
+#gsi <- numeric(args[2])
 
 #rnorm(n=as.numeric(args[1]), mean=as.numeric(args[2]))
 
@@ -30,21 +28,21 @@ for(x in csfiles)
 
 
 ## 2 - Calculate Persistence
-gsiIndex = "2014-01-01 12:00"
-gsi = 11.8
-csIndex = substr(5, nchar(gsiIndex)) # retrieve "mm-dd hh:mi" part
+#gsiDate = "2014-01-01 12:00"
+#gsi = 11.8
+csIndex = substr(gsiDate, 6, nchar(gsiDate)-3) # retrieve "mm-dd hh:mi" part
 
-ind = pmatch(csIndex,csdata$Tm)
+ind = grep(csIndex,csdata$Tm)
 csky = csdata$CS_GHI[ind]
 
 Kt = gsi / csky
 
-ind = if(ind == length(csdata$CS_GHI[ind])) 1 else i + 1
-Persistence = Kt * csdata$CS_GHI[ind];
+ind = if(ind == length(csdata$CS_GHI[ind])) 1 else ind + 1
+csky_next = csdata$CS_GHI[ind]
+perst = Kt * csky_next;
 
-# 3 - Save File
-
-
+return (c(gsiDate,csky, gsi, Kt, csky_next, perst ))
+}
 
 
 

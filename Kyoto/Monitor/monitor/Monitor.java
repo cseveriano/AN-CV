@@ -2,8 +2,10 @@ package monitor;
 
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
-import static java.nio.file.StandardWatchEventKinds.*;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -18,6 +20,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class Monitor {
@@ -147,6 +152,13 @@ public class Monitor {
 					String linha = Util.getLastLine(diretorio.toFile());
 					
 					params = linha.split("\t");
+					
+					IAlgoritmo algoritmo = new Persistence();
+					
+					algoritmo.configurar(params);
+					String[] saida = algoritmo.executar();
+					gravarSaida(saida);
+					
 				}
 				/**
 				 * Para registrar novos diretorios criados quando o monitor já
@@ -176,6 +188,12 @@ public class Monitor {
 				}
 			}
 		}
+	}
+
+	private void gravarSaida(String[] saida) throws Exception{
+		File outputFile = new File("C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS\\testeout.txt");
+		
+		FileUtils.writeStringToFile(outputFile, StringUtils.join(saida, "\t") + "\n", true);
 	}
 
 }

@@ -24,35 +24,36 @@ public class Persistence implements IAlgoritmo {
 	/**
 	 * Principal metodo do algoritmo é responsavel por fazer a chamada do Algoritmo em R e construir uma lista de arquivos de  saida(Contrato padrao)
 	 */
-	public String executar() throws Exception {
+	public String[] executar() throws Exception {
 
 		connection = Util.criaConexao();
 		REXP ret = null;
 
 		try {
 
+			connection.eval("source('~/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Routines/Persistence.R')");
 			ret = connection.parseAndEval(this.configuracao.toString());
-
+			
 		} catch (REngineException | REXPMismatchException e) {
 			throw new Exception("Erro na execução da rotina Persistence!\n Chamada: " + this.configuracao.toString(), e);
 		} finally {
 			connection.close();
 		}
 
-		return ret.asString();
+		return ret.asStrings();
 	}
 
 	@Override
 	/**
 	 * Metodo responsavel por configurar a chamada em R.
 	 */
-	public void configurar(List<String> parametros) throws Exception {
+	public void configurar(String[] parametros) throws Exception {
 		this.configuracao = new StringBuffer();
 
 		this.configuracao.append("Persistence(");
-		this.configuracao.append("'" + parametros.get(0) + "'");
+		this.configuracao.append("'" + parametros[0] + "'"); // GSitDate
 		this.configuracao.append(",");
-		this.configuracao.append("'" + parametros.get(1) + "'");
+		this.configuracao.append(parametros[1] ); // GSit
 		this.configuracao.append(")");
 	}
 

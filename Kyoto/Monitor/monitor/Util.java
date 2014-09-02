@@ -80,10 +80,13 @@ public class Util {
 	public static RConnection criaConexao() throws Exception {
 
 		RConnection connection;
-		Properties prop = getProperties();
+//		Properties prop = getProperties();
+//
+//		String serverAdress = prop.getProperty("server", "localhost");
+//		int serverPort = Integer.valueOf(prop.getProperty("port", "6311"));
 
-		String serverAdress = prop.getProperty("server", "localhost");
-		int serverPort = Integer.valueOf(prop.getProperty("port", "6311"));
+		String serverAdress = "localhost";
+		int serverPort = 6311;
 
 		connection = null;
 		try {

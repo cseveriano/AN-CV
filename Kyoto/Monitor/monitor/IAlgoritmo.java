@@ -16,12 +16,12 @@ public interface IAlgoritmo {
 	 * @param arquivos
 	 * @throws AlgoritmoException
 	 */
-	public void configurar(List<String> parametros) throws Exception;
+	public void configurar(String[] parametros) throws Exception;
 	/**
 	 * Metodo responsavel pela chamada/execução do algoritmo em si
 	 * @return
 	 * @throws AlgoritmoException
 	 */
-	public String executar() throws Exception;
+	public String[] executar() throws Exception;
 
 }
