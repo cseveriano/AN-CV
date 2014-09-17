@@ -178,6 +178,16 @@ public class Util {
 		
 		return null;
 	}
-	
+
+	public static List<String> getLastLines(File file, int lineStart) throws IOException{
+		List<String> lines = FileUtils.readLines(file);
+		
+		if(lines != null && lines.size() > 0){
+			 int index = lineStart < lines.size()? lineStart : lines.size();
+			return (List<String>) lines.subList(lines.size() - index, lines.size());
+		}
+		
+		return null;
+	}
 }
 
