@@ -183,7 +183,7 @@ public class Util {
 		List<String> lines = FileUtils.readLines(file);
 		
 		if(lines != null && lines.size() > 0){
-			 int index = lineStart < lines.size()? lineStart : lines.size();
+			 int index = lineStart < lines.size()? lineStart : lines.size() - 1;
 			return (List<String>) lines.subList(lines.size() - index, lines.size());
 		}
 		

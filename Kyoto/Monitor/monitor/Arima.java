@@ -77,12 +77,11 @@ public class Arima implements IAlgoritmo {
 			if(series != null){
 				String[] line = series.get(0).split("\t");
 				
-				connection.assign("timeseries", line[1]);
+				connection.eval("timeseries <-"+ line[1]);
 				
-				for (int i = 1; i < 2; i++) {
+				for (int i = 1; i < series.size(); i++) {
 					line = series.get(i).split("\t");
-					connection.assign("tmp", line[1]);
-					connection.eval("timeseries<-rbind(timeseries,tmp)");
+					connection.eval("timeseries<-rbind(timeseries,"+line[1]+")");
 				}
 			}
 
