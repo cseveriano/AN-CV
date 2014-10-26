@@ -37,7 +37,7 @@ public class Util {
 		if (defaultProperties == null) {
 			defaultProperties = new Properties();
 			try {
-				defaultProperties.load(Util.class.getClassLoader().getResourceAsStream("util/propiedades.properties"));
+				defaultProperties.load(Util.class.getClassLoader().getResourceAsStream("util/monitor.properties"));
 			} catch (IOException e) {
 				throw new Exception("Erro de io ao ler properties padrao do algoritmo", e);
 			}

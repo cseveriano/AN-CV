@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
@@ -40,7 +42,8 @@ public class Arima implements IAlgoritmo {
 
 		try {
 
-			connection.eval("source('~/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Routines/Arima.R')");
+//			connection.eval("source('~/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Routines/Arima.R')");
+			connection.eval("source('D:/AN-CV/KYOTO/Routines/Arima.R')");
 			int seriesLength = 100;
 			
 			List<String> series = Util.getLastLines(dataFile, seriesLength);
@@ -120,4 +123,54 @@ public class Arima implements IAlgoritmo {
 		this.configuracao = configuracao;
 	}
 
+	public String mountOutputDirFileName(String date) {
+//		String baseDir = "C:\\Users\\Carlos\\Dropbox\\KYOTO\\OUTPUTS";
+//		String baseDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS\\";
+//		String baseDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS\\";
+		String baseDir = "D:\\Dropbox\\KYOTO\\OUTPUTS";
+		String algorithm = "ARIMA";
+//		String algorithm = "ARIMA";
+		String label = "[Kyoto]";
+		String period = "[FRCST-ARIM-AVG-15]";
+		String day = date.substring(0, date.length() - 9);
+		String month = date.substring(0, day.length() - 3);
+		String extension = ".txt";
+		
+		return baseDir + "\\" +
+				algorithm + "\\" +
+				label + month + period + "\\" +
+				label + day + period + extension;
+	}
+
+	@Override
+	public String getOutputHeader() {
+
+		return "Tm" +
+				"\t" +
+				"GSi" +
+				"\t" +
+				"Arim";
+	}
+	
+	public void gravarSaida(String[] saida) throws Exception{
+		
+		File outputFile = new File(mountOutputDirFileName(saida[0]));
+		boolean written = false;
+		
+		if(outputFile.exists()){
+			String lastLineOutput = Util.getLastLine(outputFile);
+			
+			//Testa se a linha ja foi escrita no arquivo
+			if(lastLineOutput.contains(saida[0])){
+				written = true;
+			}
+		}
+		else{
+			FileUtils.writeStringToFile(outputFile, getOutputHeader() + "\n", true);
+		}
+		
+		if(!written){
+			FileUtils.writeStringToFile(outputFile, StringUtils.join(saida, "\t") + "\n", true);
+		}
+	}
 }

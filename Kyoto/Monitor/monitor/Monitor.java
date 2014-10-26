@@ -40,13 +40,14 @@ public class Monitor {
 	public static void main(String[] args) {
 
 		try{
-//			arquivoProperties = Util.getProperties();
-	
-	//			monitor = new Monitor(Paths.get(arquivoProperties.getProperty("diretorioPadrao") + File.separatorChar + arquivoProperties.getProperty("diretorioAlvos")), true, hashNomeDiretorioAlvo);
-			String inputDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\INPUTS";
+			System.out.println("Starting Monitor...");
+//			String inputDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\INPUTS";
 //			String inputDir = "C:\\Users\\Carlos\\Dropbox\\KYOTO\\INPUTS";
+			String inputDir = "D:\\Dropbox\\KYOTO\\INPUTS";
+			
 			monitor = new Monitor(Paths.get(inputDir), true);
 			monitor.processarEventos();
+			System.out.println("Monitor started");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -150,18 +151,31 @@ public class Monitor {
 				String[] params = null;
 				
 				if(kind == ENTRY_MODIFY && Files.isRegularFile(diretorio, NOFOLLOW_LINKS)){
+					System.out.println("Processing modify event...");
+					System.out.println("File "+diretorio.toFile().getName());
+
 					String linha = Util.getLastLine(diretorio.toFile());
 					
 					params = linha.split("\t");
 					
-//					IAlgoritmo algoritmo = new Persistence();
-					IAlgoritmo algoritmo = new Arima(diretorio.toFile());
+					IAlgoritmo algPersistence = new Persistence();
 					
-					algoritmo.configurar(params);
-					String[] saida = algoritmo.executar();
-					gravarSaida(saida);
+					algPersistence.configurar(params);
+					String[] saida = algPersistence.executar();
 					
-				}
+					System.out.println("Writing Persistence output...");
+					algPersistence.gravarSaida(saida);
+					System.out.println("Event Persistence processed");
+					
+					IAlgoritmo algArima = new Arima(diretorio.toFile());
+
+					algArima.configurar(params);
+					saida = algArima.executar();
+					
+					System.out.println("Writing ARIMA output...");
+					algArima.gravarSaida(saida);
+					System.out.println("Event ARIMA processed");
+}
 				/**
 				 * Para registrar novos diretorios criados quando o monitor já
 				 * estava executando
@@ -191,43 +205,5 @@ public class Monitor {
 			}
 		}
 	}
-
-	private void gravarSaida(String[] saida) throws Exception{
-		
-		
-		File outputFile = new File(mountDirFileName(saida[0]));
-		boolean written = false;
-		
-		if(outputFile.exists()){
-			String lastLineOutput = Util.getLastLine(outputFile);
-			
-			//Testa se a linha ja foi escrita no arquivo
-			if(lastLineOutput.contains(saida[0])){
-				written = true;
-			}
-		}
-		
-		if(!written){
-			FileUtils.writeStringToFile(outputFile, StringUtils.join(saida, "\t") + "\n", true);
-		}
-	}
-
-	private String mountDirFileName(String date) {
-//		String baseDir = "C:\\Users\\Carlos\\Dropbox\\KYOTO\\OUTPUTS";
-//		String algorithm = "PERSISTENCE";
-		String algorithm = "ARIMA";
-		String baseDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS\\";
-		String label = "[Kyoto]";
-		String period = "[FRCST-PRST-AVG-15]";
-		String day = date.substring(0, date.length() - 9);
-		String month = date.substring(0, day.length() - 3);
-		String extension = ".txt";
-		
-		return baseDir + "\\" +
-				algorithm + "\\" +
-				label + month + period + "\\" +
-				label + day + period + extension;
-	}
-
 }
 

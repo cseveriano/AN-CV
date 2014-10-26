@@ -23,5 +23,10 @@ public interface IAlgoritmo {
 	 * @throws AlgoritmoException
 	 */
 	public String[] executar() throws Exception;
-
+	
+	public String mountOutputDirFileName(String date);
+	
+	public String getOutputHeader();
+	
+	public void gravarSaida(String[] saida) throws Exception;
 }
