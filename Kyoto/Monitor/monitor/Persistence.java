@@ -36,7 +36,7 @@ public class Persistence implements IAlgoritmo {
 		try {
 
 //			connection.eval("source('~/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Routines/Persistence.R')");
-			connection.eval("source('D:/AN-CV/KYOTO/Routines/Persistence.R')");
+//			connection.eval("source('D:/AN-CV/KYOTO/Routines/Persistence.R')");
 			
 			ret = connection.parseAndEval(this.configuracao.toString());
 			
@@ -74,9 +74,12 @@ public class Persistence implements IAlgoritmo {
 	public String mountOutputDirFileName(String date) {
 //		String baseDir = "C:\\Users\\Carlos\\Dropbox\\KYOTO\\OUTPUTS";
 //		String baseDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS\\";
-		String baseDir = "D:\\Dropbox\\KYOTO\\OUTPUTS";
+//		String baseDir = "D:\\Dropbox\\KYOTO\\OUTPUTS";
+
+		String baseDir = "C:\\Users\\Carlos\\Dropbox\\AN-CV\\3 DATA\\6 KYOTO\\RESULTS PERS AND ARIMA";
+
+		
 		String algorithm = "PERSISTENCE";
-//		String algorithm = "ARIMA";
 		String label = "[Kyoto]";
 		String period = "[FRCST-PRST-AVG-15]";
 		String day = date.substring(0, date.length() - 9);

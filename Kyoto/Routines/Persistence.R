@@ -4,7 +4,7 @@ Persistence <- function(gsiDate, gsi){
 #rm(list = ls(all = TRUE))
 
 #dirClearSky = "../Data/ClearSky"
-dirClearSky = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/ClearSky-15"
+dirClearSky = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/ClearSky-30/2013-12"
 
 
 #receiving commands
@@ -38,7 +38,7 @@ if(length(grep("00:00:00",gsiDate))>0) {
 else{
   csDate = gsiDate
 }
-csIndex = substr(csDate, 6, nchar(csDate)-3) # retrieve "mm-dd hh:mi" part
+csIndex = substr(csDate, 6, str_length(csDate)-3) # retrieve "mm-dd hh:mi" part
 
 ind = grep(csIndex,csdata$Tm)
 csky = csdata$CS_GHI[ind]
@@ -54,7 +54,7 @@ ind = if(ind == length(csdata$CS_GHI[ind])) 1 else ind + 1
 csky_next = csdata$CS_GHI[ind]
 perst = Kt * csky_next;
 
-return (c(gsiDate,csky, gsi, Kt, csky_next, perst ))
+return (c(as.character(gsiDate),csky, gsi, Kt, csky_next, perst ))
 }
 
 

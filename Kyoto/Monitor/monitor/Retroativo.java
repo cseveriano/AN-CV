@@ -17,7 +17,10 @@ public class Retroativo {
 	
 	//			monitor = new Monitor(Paths.get(arquivoProperties.getProperty("diretorioPadrao") + File.separatorChar + arquivoProperties.getProperty("diretorioAlvos")), true, hashNomeDiretorioAlvo);
 //			String inputDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\INPUTS";
-			String inputDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\INPUTS";
+//			String inputDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\INPUTS";
+			
+			String inputDir = "C:\\Users\\Carlos\\Dropbox\\AN-CV\\3 DATA\\6 KYOTO\\[620]\\Converted to TXT\\2013\\2013-09\\2013-09[AVG-15]";
+
 			walk(inputDir);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -52,48 +55,49 @@ public class Retroativo {
 		    for(String line; (line = br.readLine()) != null; ) {
 				String[] params = line.split("\t");
 				
-				IAlgoritmo algoritmo = new Persistence();
+				IAlgoritmo algPersistence = new Persistence();
 				
-				algoritmo.configurar(params);
-				String[] saida = algoritmo.executar();
-				gravarSaida(saida);
+				algPersistence.configurar(params);
+				String[] saida = algPersistence.executar();
+				
+				algPersistence.gravarSaida(saida);
 		    }
 		}
 	}
 	
-	private static void gravarSaida(String[] saida) throws Exception{
-		
-		File outputFile = new File(mountDirFileName(saida[0]));
-		boolean written = false;
-		
-		if(outputFile.exists()){
-			String lastLineOutput = Util.getLastLine(outputFile);
-			
-			//Testa se a linha ja foi escrita no arquivo
-			if(lastLineOutput.contains(saida[0])){
-				written = true;
-			}
-		}
-		
-		if(!written){
-			FileUtils.writeStringToFile(outputFile, StringUtils.join(saida, "\t") + "\n", true);
-		}
-	}
+//	private static void gravarSaida(String[] saida) throws Exception{
+//		
+//		File outputFile = new File(mountDirFileName(saida[0]));
+//		boolean written = false;
+//		
+//		if(outputFile.exists()){
+//			String lastLineOutput = Util.getLastLine(outputFile);
+//			
+//			//Testa se a linha ja foi escrita no arquivo
+//			if(lastLineOutput.contains(saida[0])){
+//				written = true;
+//			}
+//		}
+//		
+//		if(!written){
+//			FileUtils.writeStringToFile(outputFile, StringUtils.join(saida, "\t") + "\n", true);
+//		}
+//	}
 
-	private static String mountDirFileName(String date) {
-		String baseDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS";
-		String algorithm = "PERSISTENCE";
-//		String baseDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS\\";
-		String label = "[Kyoto]";
-		String period = "[FRCST-PRST-AVG-15]";
-		String day = date.substring(0, date.length() - 9);
-		String month = date.substring(0, day.length() - 3);
-		String extension = ".txt";
-		
-		return baseDir + "\\" +
-				algorithm + "\\" +
-				label + month + period + "\\" +
-				label + day + period + extension;
-	}
+//	private static String mountDirFileName(String date) {
+//		String baseDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS";
+//		String algorithm = "PERSISTENCE";
+////		String baseDir = "C:\\Users\\Carlos\\Documents\\Projetos Machine Learning\\ANN-CV\\CODES\\Git\\AN-CV\\Kyoto\\Data\\OUTPUTS\\";
+//		String label = "[Kyoto]";
+//		String period = "[FRCST-PRST-AVG-15]";
+//		String day = date.substring(0, date.length() - 9);
+//		String month = date.substring(0, day.length() - 3);
+//		String extension = ".txt";
+//		
+//		return baseDir + "\\" +
+//				algorithm + "\\" +
+//				label + month + period + "\\" +
+//				label + day + period + extension;
+//	}
 	
 }
