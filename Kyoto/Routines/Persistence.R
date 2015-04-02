@@ -4,7 +4,7 @@ Persistence <- function(gsiDate, gsi){
 #rm(list = ls(all = TRUE))
 
 #dirClearSky = "../Data/ClearSky"
-dirClearSky = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/ClearSky-30/2013-12"
+dirClearSky = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/ClearSky-15/2013-06"
 
 
 #receiving commands
