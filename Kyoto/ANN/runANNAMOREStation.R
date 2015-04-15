@@ -1,12 +1,12 @@
 rm(list = ls(all = TRUE))
 
-#install.packages('neuralnet')
 #install.packages("hydroGOF")
 #install.packages("matrixStats")
+#install.packages("AMORE")
 
 
 library("matrixStats")
-library("neuralnet")
+library("AMORE")
 library("hydroGOF")
 library(zoo)
 library(forecast)
@@ -85,18 +85,11 @@ trainingoutput <- data$output
 trainingdata <- cbind(traininginput,trainingoutput)
 trainingdata = data[complete.cases(trainingdata),]
 
-colnames(trainingdata) <- c("G1","G2","G3","G4","G5","G6","G7","G8","Output")
 
-#Train the neural network
-#Going to have 10 hidden layers
-#Threshold is a numeric value specifying the threshold for the partial
-#derivatives of the error function as stopping criteria.
-net.sqrt <- neuralnet(Output~G1+G2+G3+G4+G5+G6+G7+G8,trainingdata, hidden=c(30), threshold=0.01, rep=3,
-                      algorithm='rprop+',err.fct='sse', act.fct='tanh', linear.output=FALSE)
-print(net.sqrt)
-
-#Plot the neural network
-#plot(net.sqrt)
+net <- newff(n.neurons=c(8,30,1), learning.rate.global=1e-2, momentum.global=0.5,
+             error.criterium="LMS", Stao=NA, hidden.layer="tansig", 
+             output.layer="purelin", method="ADAPTgdwm")
+result <- train(net, traininginput, trainingoutput, error.criterium="LMS", report=TRUE, show.step=100, n.shows=5)
 
 ########################################################################
 
@@ -156,14 +149,6 @@ validateoutput <- output
 
 ########################################################################
 
-#Test the neural network on some training data
+y <- sim(result$net, testinput)
 
-net.results <- compute(net.sqrt, testinput) #Run them through the neural network
-
-#Lets see what properties net.sqrt has
-ls(net.results)
-
-#Lets see the results
-print(net.results$net.result)
-
-print(nrmse(net.results$net.result[,1], validateoutput[,1]))
+print(nrmse(y, validateoutput[,1]))

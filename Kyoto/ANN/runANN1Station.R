@@ -22,7 +22,7 @@ dirtest =  "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git
 dir1 = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/OUTPUTS/ANN/Delta"
 
 ########################################################################
-window_size = 13
+window_size = 12
 data.interval = 30
 ########################################################################
 setwd(dirtrain)
@@ -48,7 +48,13 @@ data = data.frame(Tm, G, zen)
 #data = data[which(data$zen<70),]
 
 G = data$G
-G = (G-min(G))/(max(G)-min(G))
+gs = sort(data$G, decreasing = TRUE)
+ind = round(length(gs) * 0.05)
+Gmax = gs[ind]
+Gmin = gs[length(gs)]
+
+d = (Gmax - Gmin) / 8
+G = (G-(Gmin-d))/((Gmax +d)-(Gmin-d))
 
 G_input = NULL
 G_output = NULL
@@ -70,13 +76,13 @@ trainingoutput <- data$G_output
 trainingdata <- cbind(traininginput,trainingoutput)
 trainingdata = data[complete.cases(trainingdata),]
 
-colnames(trainingdata) <- c("G1","G2","G3","G4","G5","G6","G7","G8","G9","G10","G11","G12","G13","Output")
+colnames(trainingdata) <- c("G1","G2","G3","G4","G5","G6","G7","G8","G9","G10","G11","G12","Output")
 
 #Train the neural network
 #Going to have 10 hidden layers
 #Threshold is a numeric value specifying the threshold for the partial
 #derivatives of the error function as stopping criteria.
-net.sqrt <- neuralnet(Output~G1+G2+G3+G4+G5+G6+G7+G8+G9+G10+G11+G12+G13,trainingdata, hidden=20, threshold=0.1,
+net.sqrt <- neuralnet(Output~G1+G2+G3+G4+G5+G6+G7+G8+G9+G10+G11+G12,trainingdata, hidden=20, threshold=0.05, rep=3,
                       algorithm='rprop+',err.fct='sse', act.fct='tanh', linear.output=FALSE)
 print(net.sqrt)
 
@@ -109,7 +115,13 @@ data = data[complete.cases(data),] # remove missing points
 #data = data[which(data$zen<70),]
 
 G = data$G
-G = (G-min(G))/(max(G)-min(G))
+gs = sort(data$G, decreasing = TRUE)
+ind = round(length(gs) * 0.05)
+Gmax = gs[ind]
+Gmin = gs[length(gs)]
+
+d = (Gmax - Gmin) / 8
+G = (G-(Gmin-d))/((Gmax +d)-(Gmin-d))
 
 G_input = NULL
 G_output = NULL

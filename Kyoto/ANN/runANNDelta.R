@@ -15,7 +15,7 @@ dirtest =  "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git
 dir1 = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/OUTPUTS/ANN/Delta"
 
 ########################################################################
-window_size = 3
+window_size = 8
 
 ########################################################################
 setwd(dirtrain)
@@ -32,7 +32,14 @@ for(x in files)
 ind = c(2,6,10)
 
 G = data[,ind]
-G = (G-colMins(data.matrix(G)))/(colMaxs(data.matrix(G))-colMins(data.matrix(G)))
+
+gs = sort(data$G, decreasing = TRUE)
+ind = round(length(gs) * 0.05)
+Gmax = gs[ind]
+Gmin = gs[length(gs)]
+
+d = (Gmax - Gmin) / 8
+G = (G-(Gmin-d))/((Gmax +d)-(Gmin-d))
 
 G = G[complete.cases(G),] # remove missing points
 
@@ -61,7 +68,7 @@ colnames(trainingdata) <- c("G1","G2","G3","G4","G5","G6","G7","G8","Output")
 #Going to have 10 hidden layers
 #Threshold is a numeric value specifying the threshold for the partial
 #derivatives of the error function as stopping criteria.
-net.sqrt <- neuralnet(Output~G1+G2+G3+G4+G5+G6+G7+G8,trainingdata, hidden=4, threshold=0.1,
+net.sqrt <- neuralnet(Output~G1+G2+G3+G4+G5+G6+G7+G8,trainingdata, hidden=30, threshold=0.1,
                       algorithm='rprop+',err.fct='sse', act.fct='tanh', linear.output=FALSE)
 print(net.sqrt)
 
