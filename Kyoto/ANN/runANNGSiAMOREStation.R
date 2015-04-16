@@ -1,8 +1,8 @@
 rm(list = ls(all = TRUE))
 
+#install.packages('neuralnet')
 #install.packages("hydroGOF")
 #install.packages("matrixStats")
-#install.packages("AMORE")
 
 
 library("matrixStats")
@@ -22,7 +22,7 @@ dirtest =  "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git
 dir1 = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/OUTPUTS/ANN/Delta"
 
 ########################################################################
-window_size = 4
+window_size = 12
 data.interval = 30
 ########################################################################
 setwd(dirtrain)
@@ -42,17 +42,12 @@ zen = SolPos[["zenith"]]
 Tm = as.POSIXlt(data$Tm, tz = "GMT")
 
 G = data[,10] # 10 - Station 309
-AirP = data[,19] # 19 - Station 309
-
-data = data.frame(Tm, G, AirP, zen)
-data = data[complete.cases(data),] # remove missing points
+data = data.frame(Tm, G, zen)
 #plot(data$G[1000:1048],type = "l")
 #lines(data$CSky[1000:1048],col=2)
 #data = data[which(data$zen<70),]
 
 G = data$G
-
-###NORMALIZATION ###
 gs = sort(data$G, decreasing = TRUE)
 ind = round(length(gs) * 0.05)
 Gmax = gs[ind]
@@ -60,33 +55,32 @@ Gmin = gs[length(gs)]
 
 d = (Gmax - Gmin) / 8
 G = (G-(Gmin-d))/((Gmax +d)-(Gmin-d))
-#G = (G-min(G))/(max(G)-min(G))
 
-AirP = data$AirP
-AirP = (AirP-min(AirP))/(max(AirP)-min(AirP))
-
-input = NULL
-output = NULL
+G_input = NULL
+G_output = NULL
 
 
 for(i in 1:(length(G)-window_size))
 {
-  input = rbind(input, cbind(t(G[i:(i+window_size-1)]), t(AirP[i:(i+window_size-1)])))
-  output = rbind(output, G[(i+window_size)])
+  G_input = rbind(G_input,cbind(hour(Tm[i]), t(G[i:(i+window_size-1)])))
+#  G_input = rbind(G_input, t(G[i:(i+window_size-1)]))
+  G_output = rbind(G_output, G[(i+window_size)])
 }
 
-data = data.frame(input, output)
+Dmax = max(G_input[,1])
+Dmin = min(G_input[,1])
+
+d = (Dmax - Dmin) / 8
+G_input[,1] = (G_input[,1]-(Dmin-d))/((Dmax +d)-(Dmin-d))
+
+
+data = data.frame(G_input, G_output)
 data = data[complete.cases(data),] # remove missing points
 
-traininginput <-  as.data.frame(input)
-trainingoutput <- data$output
+traininginput <-  as.data.frame(G_input)
+trainingoutput <- data$G_output
 
-#Column bind the data into one variable
-trainingdata <- cbind(traininginput,trainingoutput)
-trainingdata = data[complete.cases(trainingdata),]
-
-
-net <- newff(n.neurons=c(8,2,1), learning.rate.global=1e-2, momentum.global=0.5,
+net <- newff(n.neurons=c(window_size+1,2,1), learning.rate.global=1e-2, momentum.global=0.5,
              error.criterium="LMS", Stao=NA, hidden.layer="tansig", 
              output.layer="purelin", method="ADAPTgdwm")
 result <- train(net, traininginput, trainingoutput, error.criterium="LMS", report=TRUE, show.step=100, n.shows=5)
@@ -110,16 +104,13 @@ zen = SolPos[["zenith"]]
 Tm = as.POSIXlt(data$Tm, tz = "GMT")
 
 G = data[,10] # 10 - Station 309
-AirP = data[,19] # 19 - Station 309
-
-data = data.frame(Tm, G, AirP, zen)
+data = data.frame(Tm, G, zen)
 #plot(data$G[1000:1048],type = "l")
 #lines(data$CSky[1000:1048],col=2)
+data = data[complete.cases(data),] # remove missing points
 #data = data[which(data$zen<70),]
 
 G = data$G
-
-### NORMALIZATION ###
 gs = sort(data$G, decreasing = TRUE)
 ind = round(length(gs) * 0.05)
 Gmax = gs[ind]
@@ -128,24 +119,30 @@ Gmin = gs[length(gs)]
 d = (Gmax - Gmin) / 8
 G = (G-(Gmin-d))/((Gmax +d)-(Gmin-d))
 
-AirP = data$AirP
-AirP = (AirP-min(AirP))/(max(AirP)-min(AirP))
-
-input = NULL
-output = NULL
+G_input = NULL
+G_output = NULL
 
 
 for(i in 1:(length(G)-window_size))
 {
-  input = rbind(input, cbind(t(G[i:(i+window_size-1)]), t(AirP[i:(i+window_size-1)])))
-  output = rbind(output, G[(i+window_size)])
+  G_input = rbind(G_input,cbind(hour(Tm[i]), t(G[i:(i+window_size-1)])))
+  G_output = rbind(G_output, G[(i+window_size)])
 }
 
-data = data.frame(input, output)
+
+Dmax = max(G_input[,1])
+Dmin = min(G_input[,1])
+
+d = (Dmax - Dmin) / 8
+G_input[,1] = (G_input[,1]-(Dmin-d))/((Dmax +d)-(Dmin-d))
+
+
+data = data.frame(G_input, G_output)
 data = data[complete.cases(data),] # remove missing points
 
-testinput <-  as.data.frame(input)
-validateoutput <- output
+
+testinput <-  as.data.frame(G_input)
+validateoutput <- G_output
 
 ########################################################################
 

@@ -24,4 +24,14 @@ calZen <- function(Tm, lat, lon, tz, interval)
 }
 
 
-
+getSeason <- function(Tm){
+  m = month(Tm)
+  if(m >= 3 || m <=8){
+    out = 1 # Dry season
+  }else{
+    out = 0 # Wet season
+  }
+  
+  out
+}
+  
