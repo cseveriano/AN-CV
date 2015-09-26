@@ -34,4 +34,15 @@ getSeason <- function(Tm){
   
   out
 }
+
+normalize <- function(udata){
+  ud = sort(udata, decreasing = TRUE)
+  ind = round(length(ud) * 0.05)
+  Dmax = ud[ind]
+  Dmin = ud[length(ud)]
   
+  d = (Dmax - Dmin) / 8
+  out = (udata-(Dmin-d))/((Dmax +d)-(Dmin-d))
+  
+  out
+}

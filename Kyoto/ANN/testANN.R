@@ -11,16 +11,16 @@ source("C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-
 
 #dir0 = "C:/Users/Carlos/Dropbox/AN-CV/3 DATA/6 KYOTO/[619]/Converted to TXT/2013"
 dirtrain = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/INPUTS/Delta/Train"
-dirtest =  "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/INPUTS/Delta/Test"
+dirtest =  "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/INPUTS/Delta/Test/2015-03"
 dir1 = "C:/Users/Carlos/Documents/Projetos Machine Learning/ANN-CV/CODES/Git/AN-CV/Kyoto/Data/OUTPUTS/ANN/Delta"
 
 ########################################################################
-window_size = 12
+window_size = 8
 data.interval = 30
 ########################################################################
 
 setwd(dirtest)
-files = list.files(pattern='*\\[AVG-30\\].txt', recursive=TRUE)
+files = list.files(pattern='*\\[AVG-60\\].txt', recursive=TRUE)
 
 data = NULL
 for(x in files)
